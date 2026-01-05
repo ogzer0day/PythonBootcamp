@@ -75,8 +75,8 @@ if __name__ == "__main__":
     player = game_data["players"]['alice']['items']
     catalog = game_data["catalog"]
     i = 0
-    Inventory_value = 0
-    Item_count = 0
+    Inventory_value = game_data["players"]['alice']['total_value']
+    Item_count = game_data["players"]['alice']['item_count']
     for value in player.keys():
         for val in catalog.keys():
             if value == val:
@@ -90,5 +90,10 @@ if __name__ == "__main__":
                     f"{quantity}x @ {item_value} gold each = "
                     f"{total_price} gold"
                     )
-                Item_count += item_value
-                Inventory_value += total_price
+    print()
+    print(f"Inventory value: {Inventory_value} gold")
+    print(f"Item count: {Item_count} items")
+    print("Categories: pixel_sword(1), code_bow(1), health_byte(1), "
+          "quantum_ring(3)")
+    print()
+    print("=== Transaction: Alice gives Bob 2 potions ===")
