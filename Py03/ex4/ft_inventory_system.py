@@ -94,6 +94,14 @@ if __name__ == "__main__":
     print(f"Inventory value: {Inventory_value} gold")
     print(f"Item count: {Item_count} items")
     print("Categories: pixel_sword(1), code_bow(1), health_byte(1), "
-          "quantum_ring(3)")
-    print()
-    print("=== Transaction: Alice gives Bob 2 potions ===")
+          "quantum_ring(3)\n")
+
+    print("=== Transaction: Alice gives Bob 2 quantum_ring ===")
+    if (player['quantum_ring'] - 2) > 0:
+        print("Transaction successful!\n")
+        print("=== Updated Inventories ===")
+        print(f"Alice potions: {player['quantum_ring'] - 2}")
+        print("Bob potions: 2")
+    else:
+        print("Transaction failed: not enough items\n")
+
