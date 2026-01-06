@@ -1,3 +1,24 @@
+"""
+Game Analytics Dashboard
+
+This script analyzes game data stored in the GameData dictionary. It demonstrates:
+- List comprehensions to filter and transform data
+- Dictionary comprehensions to summarize player scores and achievements
+- Set comprehensions to find unique players, achievements, and game modes
+- Generator expressions to compute total players, unique achievements, average score, and identify top performers
+
+Data includes:
+- Players with level, total score, sessions played, favorite mode, and achievements
+- Individual sessions with player name, score, duration, mode, and completion status
+- Metadata including game modes and achievement types
+
+The script prints an analytics dashboard summarizing:
+- High scorers and their doubled scores
+- Score categories and achievement counts
+- Unique players, achievements, and active game modes
+- Total players, average score, and top performer
+"""
+
 GameData = {
     "players": {
         "alice": {
@@ -47,64 +68,6 @@ GameData = {
     "sessions": [
         {"player": "bob", "duration_minutes": 94, "score": 1831,
          "mode": "competitive", "completed": False},
-        {"player": "bob", "duration_minutes": 32, "score": 1478,
-         "mode": "casual", "completed": True},
-        {"player": "diana", "duration_minutes": 17, "score": 1570,
-         "mode": "competitive", "completed": False},
-        {"player": "alice", "duration_minutes": 98, "score": 1981,
-         "mode": "ranked", "completed": True},
-        {"player": "diana", "duration_minutes": 15, "score": 2361,
-         "mode": "competitive", "completed": False},
-        {"player": "eve", "duration_minutes": 29, "score": 2985,
-         "mode": "casual", "completed": True},
-        {"player": "frank", "duration_minutes": 34, "score": 1285,
-         "mode": "casual", "completed": True},
-        {"player": "alice", "duration_minutes": 53, "score": 1238,
-         "mode": "competitive", "completed": False},
-        {"player": "bob", "duration_minutes": 52, "score": 1555,
-         "mode": "casual", "completed": False},
-        {"player": "frank", "duration_minutes": 92, "score": 2754,
-         "mode": "casual", "completed": True},
-        {"player": "eve", "duration_minutes": 98, "score": 1102,
-         "mode": "casual", "completed": False},
-        {"player": "diana", "duration_minutes": 39, "score": 2721,
-         "mode": "ranked", "completed": True},
-        {"player": "frank", "duration_minutes": 46, "score": 329,
-         "mode": "casual", "completed": True},
-        {"player": "charlie", "duration_minutes": 56, "score": 1196,
-         "mode": "casual", "completed": True},
-        {"player": "eve", "duration_minutes": 117, "score": 1388,
-         "mode": "casual", "completed": False},
-        {"player": "diana", "duration_minutes": 118, "score": 2733,
-         "mode": "competitive", "completed": True},
-        {"player": "charlie", "duration_minutes": 22, "score": 1110,
-         "mode": "ranked", "completed": False},
-        {"player": "frank", "duration_minutes": 79, "score": 1854,
-         "mode": "ranked", "completed": False},
-        {"player": "charlie", "duration_minutes": 33, "score": 666,
-         "mode": "ranked", "completed": False},
-        {"player": "alice", "duration_minutes": 101, "score": 292,
-         "mode": "casual", "completed": True},
-        {"player": "frank", "duration_minutes": 25, "score": 2887,
-         "mode": "competitive", "completed": True},
-        {"player": "diana", "duration_minutes": 53, "score": 2540,
-         "mode": "competitive", "completed": False},
-        {"player": "eve", "duration_minutes": 115, "score": 147,
-         "mode": "ranked", "completed": True},
-        {"player": "frank", "duration_minutes": 118, "score": 2299,
-         "mode": "competitive", "completed": False},
-        {"player": "alice", "duration_minutes": 42, "score": 1880,
-         "mode": "casual", "completed": False},
-        {"player": "alice", "duration_minutes": 97, "score": 1178,
-         "mode": "ranked", "completed": True},
-        {"player": "eve", "duration_minutes": 18, "score": 2661,
-         "mode": "competitive", "completed": True},
-        {"player": "bob", "duration_minutes": 52, "score": 761,
-         "mode": "ranked", "completed": True},
-        {"player": "eve", "duration_minutes": 46, "score": 2101,
-         "mode": "casual", "completed": True},
-        {"player": "charlie", "duration_minutes": 117, "score": 1359,
-         "mode": "casual", "completed": True},
     ],
 
     "meta": {
@@ -124,6 +87,18 @@ GameData = {
 
 
 def list_comprehension():
+    """
+    Demonstrates list comprehension usage.
+
+    - hights_scores: List of players whose total_score > 2000
+    - Scores_doubled: List of those players' scores multiplied by 2
+    - Active_players: List of all players in the dataset
+
+    Prints:
+    - High scorers (>2000)
+    - Scores doubled
+    - Active players
+    """
     players = GameData["players"]
     hights_scores = [player for player in players
                      if players[player]['total_score'] > 2000]
@@ -137,6 +112,21 @@ def list_comprehension():
 
 
 def dict_comprehension():
+    """
+    Demonstrates dictionary comprehension usage.
+
+    - Player_scores: Maps each player to their total_score
+    - achievements_count: Maps each player to their achievements_count
+    - Score categories:
+        * high: total_score >= 5000
+        * medium: 2000 <= total_score <= 5000
+        * low: total_score < 2000
+
+    Prints:
+    - Player scores dictionary
+    - Count of players in each score category
+    - Player achievement counts
+    """
     players = GameData["players"]
     high = sum(1 for player in players
                if players[player]['total_score'] >= 5000)
@@ -158,6 +148,18 @@ def dict_comprehension():
 
 
 def set_comprehension():
+    """
+    Demonstrates set comprehension usage.
+
+    - Unique_players: Set of all players
+    - Unique achievements: Set of all achievements defined in meta
+    - Active regions: Set of all game modes defined in meta
+
+    Prints:
+    - Unique players
+    - Unique achievements
+    - Active game modes
+    """
     players = GameData["players"]
     meta = GameData["meta"]
     Unique_players = {player for player in players}
@@ -168,6 +170,16 @@ def set_comprehension():
 
 
 if __name__ == "__main__":
+    """
+    Main execution block.
+
+    Runs all sections:
+    - List comprehension examples
+    - Dictionary comprehension examples
+    - Set comprehension examples
+    - Generator demonstration (total players, unique achievements, average 
+        score, top performer)
+    """
     print("=== Game Analytics Dashboard ===\n")
 
     print("=== List Comprehension Examples ===")
