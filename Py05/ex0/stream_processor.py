@@ -7,7 +7,7 @@ class DataProcessor(ABC):
     processors."""
 
     @abstractmethod
-    def process(self, data: Any) -> Any:
+    def process(self, data: Any) -> str:
         """Process the input data and return a result. Must be implemented by
           subclasses."""
         pass
@@ -19,7 +19,7 @@ class DataProcessor(ABC):
         pass
 
     @abstractmethod
-    def format_output(self, result: Any) -> str:
+    def format_output(self, result: str) -> str:
         """Format the processed result into a human-readable string."""
         pass
 
@@ -65,7 +65,7 @@ class TextProcessor(DataProcessor):
         except Exception:
             return "Error"
 
-    def validate(self, data: str) -> bool:
+    def validate(self, data: Any) -> bool:
         """Check if the input is a string."""
         return isinstance(data, str)
 
@@ -80,7 +80,7 @@ class LogProcessor(DataProcessor):
     """Processor for log messages: generates status or error messages,
     validates log input, and formats output based on severity."""
 
-    def process(self, data: str) -> str:
+    def process(self, data: Any) -> str:
         """
         Return a log message. If input is 'Error',
         returns a simulated error log; otherwise,

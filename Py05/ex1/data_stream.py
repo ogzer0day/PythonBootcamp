@@ -1,24 +1,66 @@
+"""
+Polymorphic Stream Processing System
+
+This module defines an abstract streaming framework that supports multiple
+stream types (sensor, transaction, event) using inheritance, method overriding,
+and polymorphism. A central StreamProcessor coordinates batch processing
+through a unified interface.
+"""
+
 from abc import ABC, abstractmethod
 from typing import Any, List, Dict, Union, Optional
 
 
 class DataStream(ABC):
+    """
+    Abstract base class representing a generic data stream.
+
+    All concrete stream types mouust inherit from this class and implement
+    the `process_batch` method.
+    """
+
     def __init__(self, stream_id: str, stream_type: str = None) -> None:
+        """
+        Initialize a data stream.
+
+        :param stream_id: Unique identifier for the stream
+        :param stream_type: Description of the stream category
+        """
         self.stream_id = stream_id
         self.stream_type = stream_type
 
     @abstractmethod
     def process_batch(self, data_batch: List[Any]) -> str:
+        """
+        Process a batch of data specific to the stream type.
+
+        Must be implemented by all subclasses.
+
+        :param data_batch: A batch of incoming data
+        :return: Human-readable processing summary
+        """
         pass
 
     def filter_data(
         self, data_batch: List[Any], criteria: Optional[str] = None
     ) -> List[Any]:
+        """
+        Filter data items based on a string-matching criteria.
+
+        :param data_batch: List of data items to filter
+        :param criteria: Optional substring to match against items
+        :return: Filtered list of data items
+        """
         if criteria is None:
             return data_batch
         return [item for item in data_batch if criteria in str(item)]
 
     def get_stats(self) -> Dict[str, Union[str, int, float]]:
+        """
+        Retrieve basic metadata statistics for the stream.
+
+        :return: Dictionary containing stream identifier and type
+        """
         return {
             "stream_id": self.stream_id,
             "stream_type": self.stream_type,
@@ -26,16 +68,37 @@ class DataStream(ABC):
 
 
 class SensorStream(DataStream):
+    """
+    Concrete stream for processing sensor data such as temperature
+    and environmental readings.
+    """
+
     def __init__(
         self, stream_id: str, stream_type: str = None, count: int = None,
         avg_temp: float = None
     ) -> None:
+        """
+        Initialize a sensor data stream.
+
+        :param stream_id: Unique identifier for the stream
+        :param stream_type: Description of the stream category
+        :param count: Number of sensor readings processed
+        :param avg_temp: Average temperature reading
+        """
         super().__init__(stream_id, stream_type)
         self.avg_temp = avg_temp
         self.count = count
 
     def process_batch(self, data_batch: List[Any]) -> str:
-        self.count = sum([1 for _ in data_batch[0].values()])
+        """
+        Process a batch of sensor readings.
+
+        Calculates the number of readings and extracts temperature data.
+
+        :param data_batch: List containing sensor reading dictionaries
+        :return: Processing summary string
+        """
+        self.count = sum(1 for _ in data_batch[0].values())
         new_lst = [f"{key}: {val}" for key, val in data_batch[0].items()]
         readable_str = str(new_lst).replace("'", "")
         self.avg_temp = sum(
@@ -45,31 +108,69 @@ class SensorStream(DataStream):
 
 
 class TransactionStream(DataStream):
+    """
+    Concrete stream for processing financial transaction data.
+    """
+
     def __init__(
         self, stream_id: str, stream_type: str = None, net_flow: int = None
     ) -> None:
+        """
+        Initialize a transaction data stream.
+
+        :param stream_id: Unique identifier for the stream
+        :param stream_type: Description of the stream category
+        :param net_flow: Net flow of transaction values
+        """
         super().__init__(stream_id, stream_type)
         self.net_flow = net_flow
 
     def process_batch(self, data_batch: List[Any]) -> str:
-        self.count = sum([1 for _ in data_batch[0].values()])
+        """
+        Process a batch of transaction records.
+
+        Computes total operations and net transaction flow.
+
+        :param data_batch: List containing transaction dictionaries
+        :return: Processing summary string
+        """
+        self.count = sum(1 for _ in data_batch[0].values())
         new_lst = [f"{key}: {val}" for key, val in data_batch[0].items()]
         readable_str = str(new_lst).replace("'", "")
         self.net_flow = sum(
-            val if key == "buy_a" or "buy_b" else 0
+            val if key == "buy_a" or key == "buy_b" else 0
             for key, val in data_batch[0].items()
         )
         return f"Processing sensor batch: {readable_str}"
 
 
 class EventStream(DataStream):
+    """
+    Concrete stream for processing system or application event data.
+    """
+
     def __init__(
         self, stream_id: str, stream_type: str = None, detect_error: int = None
     ) -> None:
+        """
+        Initialize an event data stream.
+
+        :param stream_id: Unique identifier for the stream
+        :param stream_type: Description of the stream category
+        :param detect_error: Number of detected error events
+        """
         super().__init__(stream_id, stream_type)
         self.detect_error = detect_error
 
     def process_batch(self, data_batch: List[Any]) -> str:
+        """
+        Process a batch of event messages.
+
+        Counts total events and detects error occurrences.
+
+        :param data_batch: List of event strings
+        :return: Processing summary string
+        """
         self.count = sum(1 for _ in data_batch)
         readable_str = str(data_batch).replace("'", "")
         self.detect_error = sum(
@@ -79,15 +180,33 @@ class EventStream(DataStream):
 
 
 class StreamProcessor:
-    """Coordinator for polymorphic stream processing."""
+    """
+    Coordinator class for managing and processing multiple data streams
+    using polymorphism.
+    """
 
     def __init__(self) -> None:
+        """
+        Initialize the stream processor with an empty registry.
+        """
         self.streams: List[DataStream] = []
 
     def register_stream(self, stream: DataStream) -> None:
+        """
+        Register a new data stream for processing.
+
+        :param stream: A concrete DataStream instance
+        """
         self.streams.append(stream)
 
     def process_all(self, batches: Dict[str, List[Any]]) -> None:
+        """
+        Process batches for all registered streams.
+
+        Each stream processes its corresponding batch based on stream ID.
+
+        :param batches: Mapping of stream IDs to data batches
+        """
         for stream in self.streams:
             batch = batches.get(stream.stream_id)
             if batch is not None:
