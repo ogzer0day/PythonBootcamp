@@ -11,10 +11,12 @@ strategy = AggressiveStrategy()
 game.configure_engine(factory, strategy)
 print()
 
-#game.simulate_turn()
-
-
 print("Simulating aggressive turn...")
+rep = game.simulate_turn()
+print("Hand:",rep.get("hand"), "\n")
+
+print("Turn execution:")
+
 
 
 print("Abstract Factory + Strategy Pattern: Maximum flexibility achieved!")
