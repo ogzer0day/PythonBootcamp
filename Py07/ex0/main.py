@@ -1,4 +1,4 @@
-from CreatureCard import CreatureCard
+from ex0.CreatureCard import CreatureCard
 
 
 print("=== DataDeck Card Foundation ===\n")
@@ -15,11 +15,8 @@ print(info, "\n")
 
 print("Playing Fire Dragon with 6 mana available:")
 print(f"Player: {card.is_playable(6)}")
-result = card.play({
-    "card_player": "Fire Dragon",
-    "mana_used": 5,
-    "effect": "Creature summoned to battlefield"
-})
+result = card.play()
+
 print(f"Play result: {result}\n")
 
 print("Fire Dragon attacks Goblin Warrior:")

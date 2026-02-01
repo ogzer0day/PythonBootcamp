@@ -8,10 +8,8 @@ print("=== DataDeck Deck Builder ===\n")
 print("Building deck with different card types...")
 
 spell = SpellCard("Lightning Bolt", 3, "Common", "Deal 3 damage to target")
-artifact = ArtifactCard("Mana Crystal", 4, "Permanent: +1 mana per turn",
-                        "Common", 2)
-creature = CreatureCard("Fire Dragon", 5, "Creature summoned to battlefield",
-                        "common", 2, 1)
+artifact = ArtifactCard("Mana Crystal", 4, "Permanent: +1 mana per turn")
+creature = CreatureCard("Fire Dragon", 5, "Creature summoned to battlefield")
 
 list_cards: list [Card] = [spell, artifact, creature]
 

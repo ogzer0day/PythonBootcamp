@@ -3,7 +3,10 @@ from abc import ABC, abstractmethod
 
 class Card(ABC):
 
-    def __init__(self, name: str, cost: int, rarity: str):
+    def __init__(self,
+                 name: str = None,
+                 cost: int = None,
+                 rarity: str = None):
         self.name = name
         self.cost = cost
         self.rarity = rarity
