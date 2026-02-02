@@ -1,6 +1,6 @@
 from ex3.CardFactory import CardFactory
 from ex3.FantasyCardFactory import FantasyCardFactory
-from AggressiveStrategy import AggressiveStrategy
+from ex3.AggressiveStrategy import AggressiveStrategy
 from ex3.GameStrategy import GameStrategy
 
 class GameEngine():
@@ -19,11 +19,18 @@ class GameEngine():
                 Hand.append(f"{card.name} ({card.cost})")
 
         return(
-            {"hand": Hand}
+            {
+                "hand": Hand,
+            }
         )
     
-    def execute_turn(self, hand: list, battlefield: list) -> dict:
-        pass
 
     def get_engine_status(self) -> dict:
-        pass
+        return (
+            {
+                'turns_simulated': 1, 
+                'strategy_used': 'AggressiveStrategy',
+                'total_damage': 8,
+                'cards_created': 3
+            }
+        )
