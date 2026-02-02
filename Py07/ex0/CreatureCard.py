@@ -21,4 +21,10 @@ class CreatureCard(Card):
         )
 
     def attack_target(self, target) -> dict:
-        return (target)
+        return (
+            {
+                'attacker': self.name,
+                'target': target,
+                'damage': self.attack
+            }
+        )
