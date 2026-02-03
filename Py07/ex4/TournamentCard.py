@@ -4,7 +4,7 @@ from ex4.Rankable import Rankable
 
 class TournamentCard(Card, Combatable, Rankable):
 
-    def __init__(self, name: str, card_id: str, rating: int = 1200):
+    def __init__(self, name: str, card_id: str, rating: int):
         super().__init__(name=name)
         self.card_id = card_id
         self.rating = rating
@@ -23,6 +23,11 @@ class TournamentCard(Card, Combatable, Rankable):
                 'damage': 5
             }
         )
+    def defend(self, attack_points: int) -> int:
+        return max(0, attack_points - 2)
+
+    def get_combat_stats(self) -> dict:
+        return {"name": self.name, "attack": 5, "defense": 2}
 
     def get_tournament_stats(self) -> dict:
         return self.play(
@@ -31,7 +36,7 @@ class TournamentCard(Card, Combatable, Rankable):
                 'Id': self.card_id,
                 'Interfaces': ['Card', 'Combatable', 'Rankable'],
                 'Rating': self.rating,
-                'Record': '0-0'
+                'Record': f"{self.wins}-{self.losses}"
             }
         )
 
@@ -44,8 +49,9 @@ class TournamentCard(Card, Combatable, Rankable):
         self.rating += 16 * wins
     
     def update_losses(self, losses: int) -> None:
-        self.losses += losses
-        self.rating += 16 * losses
+        if self.losses > 0:
+            self.losses -= losses
+        self.rating -= 16 * losses
 
     def get_rank_info(self) -> dict:
         return (

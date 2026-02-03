@@ -7,9 +7,14 @@ class TournamentPlatform():
         pass
 
     def create_match(self, card1_id: str, card2_id: str) -> dict:
-        winner, loser = random((card1_id, card2_id), (card2_id, card1_id))
+
+        match1 = (card1_id, card2_id)
+        match2 = (card2_id, card1_id)
+
+        winner, loser = random.choice([match1, match2])
         winner.update_wins(1)
         loser.update_losses(1)
+        
         return(
             {
                 "winner": winner.card_id,
