@@ -18,9 +18,29 @@ print(f"- Rating: {tournament_stats.get('Rating')}")
 print(f"- Record: {tournament_stats.get('Record')}\n")
 
 print("Creating tournament match..")
-match = TournamentPlatform()
-tournament_matchmatch = match.create_match("dragon_001", "wizard_001")
-print(f"Match result: {tournament_matchmatch}\n")
+platform = TournamentPlatform()
+platform.register_card(card1)
+platform.register_card(card2)
+
+print("Creating tournament match...\n")
+result = platform.create_match("dragon_001", "wizard_001")
+
+print("Match result:")
+print(result)
+print()
+
+print("Tournament Leaderboard:")
+tournament = platform.get_leaderboard()
+if result['winner'] == 'dragon_001':
+    print(f"1. Fire Dragon - Rating: {tournament[0]}")
+    print(f"2. Ice Wizard - Rating: {tournament[1]}\n")
+else:
+    print(f"1. Ice Wizard - Rating: {tournament[0]}")
+    print(f"2. Fire Dragon - Rating: {tournament[1]}\n")
+
+print("Platform Report:")
+print(platform.generate_tournament_report())
+print()
 
 print("=== Tournament Platform Successfully Deployed! ===\n"
     "All abstract patterns working together harmoniously!")
