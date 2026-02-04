@@ -31,7 +31,7 @@ print()
 
 print("Tournament Leaderboard:")
 tournament = platform.get_leaderboard()
-if result['winner'] == 'dragon_001':
+if result["winner"] == "dragon_001":
     print(f"1. Fire Dragon - Rating: {tournament[0]}")
     print(f"2. Ice Wizard - Rating: {tournament[1]}\n")
 else:
@@ -42,5 +42,7 @@ print("Platform Report:")
 print(platform.generate_tournament_report())
 print()
 
-print("=== Tournament Platform Successfully Deployed! ===\n"
-    "All abstract patterns working together harmoniously!")
+print(
+    "=== Tournament Platform Successfully Deployed! ===\n"
+    "All abstract patterns working together harmoniously!"
+)

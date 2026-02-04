@@ -11,7 +11,7 @@ spell = SpellCard("Lightning Bolt", 3, "Common", "Deal 3 damage to target")
 artifact = ArtifactCard("Mana Crystal", 4, "Permanent: +1 mana per turn")
 creature = CreatureCard("Fire Dragon", 5, "Creature summoned to battlefield")
 
-list_cards: list [Card] = [spell, artifact, creature]
+list_cards: list[Card] = [spell, artifact, creature]
 
 deck = Deck()
 for val in list_cards:
@@ -22,21 +22,21 @@ gamestate = {"gamestate": "common"}
 
 print(f"Deck stats: {deck_stat}\n")
 
-print('Drawing and playing cards:\n')
+print("Drawing and playing cards:\n")
 
-print(f'Drew: {spell.name} (Spell)')
+print(f"Drew: {spell.name} (Spell)")
 play_result = spell.play(gamestate)
 print(f"Play result: {spell.play(gamestate)}\n")
 
 deck.draw_card()
 
-print(f'Drew: {artifact.name} (Artifact)')
+print(f"Drew: {artifact.name} (Artifact)")
 play_result = artifact.play(gamestate)
 print(f"Play result: {play_result}\n")
 
 deck.draw_card()
 
-print(f'Drew: {creature.name} (Creature)')
+print(f"Drew: {creature.name} (Creature)")
 play_result = creature.play(gamestate)
 print(f"Play result: {play_result}\n")
 
