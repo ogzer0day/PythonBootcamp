@@ -6,7 +6,12 @@ import matplotlib.pyplot as plt
 
 
 def check_pandas():
-
+    """
+    Check if the 'pandas' library is installed and print its status.
+    
+    Returns:
+        True if pandas is available, None otherwise.
+    """
     if importlib.util.find_spec("pandas") is None:
         print(f"[FAIL] pandas - Data manipulation NOT ready")
         return None
@@ -19,6 +24,12 @@ def check_pandas():
 
 
 def check_requests():
+    """
+    Check if the 'requests' library is installed and print its status.
+    
+    Returns:
+        True if requests is available, None otherwise.
+    """
     if importlib.util.find_spec("requests") is None:
         print(f"[FAIL] requests - HTTP client NOT ready")
         return None
@@ -31,18 +42,30 @@ def check_requests():
 
 
 def check_matplotlib():
+    """
+    Check if the 'matplotlib' library is installed and print its status.
+    
+    Returns:
+        True if matplotlib is available, None otherwise.
+    """
     if importlib.util.find_spec("matplotlib") is None:
         print(f"[FAIL] matplotlib - Plotting NOT ready")
         return None
     else:
         print(
-            f"[OK] pandas ({importlib.metadata.version('matplotlib')}) "
+            f"[OK] matplotlib ({importlib.metadata.version('matplotlib')}) "
             "- Visualization ready"
         )
         return True
 
 
 def analyze_matrix_data():
+    """
+    Generate a random matrix and compute the mean of each column.
+    
+    Returns:
+        list[list[float]]: The generated matrix of random floats.
+    """
     rows = 100
     cols = 10
 
@@ -61,6 +84,12 @@ def analyze_matrix_data():
 
 
 def visualize_matrix(matrix):
+    """
+    Create a heatmap visualization of the given matrix and save it as PNG.
+    
+    Args:
+        matrix (list[list[float]]): The matrix to visualize.
+    """
     plt.figure(figsize=(10, 6))
     plt.imshow(matrix, aspect="auto", cmap="viridis")
     plt.colorbar(label="Value")
