@@ -39,24 +39,6 @@ SPACE_MISSIONS = [
                 'years_experience': 15,
                 'is_active': True
             },
-            {
-                'member_id': 'CM004',
-                'name': 'David Smith',
-                'rank': 'commander',
-                'age': 27,
-                'specialization': 'Security',
-                'years_experience': 15,
-                'is_active': True
-            },
-            {
-                'member_id': 'CM005',
-                'name': 'Maria Jones',
-                'rank': 'cadet',
-                'age': 55,
-                'specialization': 'Research',
-                'years_experience': 30,
-                'is_active': True
-            }
         ],
         'mission_status': 'planned',
         'budget_millions': 2208.1
@@ -84,7 +66,7 @@ class CrewMember(BaseModel):
     @model_validator(mode="after")
     def check_rank(self):
         if self.rank != RankEnum.captain and self.rank != RankEnum.commander:
-            raise ValueError("Must have at least one Commander or Captain")
+            raise ValueError("Mission must have at least one Commander or Captain")
         return self
 
 class SpaceMission(BaseModel):
@@ -99,8 +81,57 @@ class SpaceMission(BaseModel):
 
 
     @model_validator(mode="after")
-    def check_mission_id(self):
-        if self.mission_id[0] != 'M':
+    def validate_mission(self):
+
+        if not self.mission_id[0] != "M":
             raise ValueError("Mission ID must start with 'M'")
-        return (self)
-    
+
+        if not any(
+            member.rank in {RankEnum.captain, RankEnum.commander}
+            for member in self.crew
+        ):
+            raise ValueError("Mission must have at least one Commander or Captain")
+        
+        if not all(member.is_active for member in self.crew):
+            raise ValueError("All crew members must be active")
+
+        if self.duration_days > 365:
+            experienced = [
+                member for member in self.crew
+                if member.years_experience >= 5
+            ]
+            if len(experienced) < len(self.crew) / 2:
+                raise ValueError(
+                    "Long missions (>365 days) require at least 50%/ experienced crew"
+                )
+
+        return self
+
+
+
+
+def main():
+    print("Space Mission Crew Validation")
+    print("=========================================")
+
+    try:
+        mission = SpaceMission(**SPACE_MISSIONS[0])
+
+        print("Valid mission created:")
+        print(f"Mission: {mission.mission_name}")
+        print(f"ID: {mission.mission_id}")
+        print(f"Destination: {mission.destination}")
+        print(f"Duration: {mission.duration_days} days")
+        print(f"Budget: ${mission.budget_millions}M")
+        print(f"Crew size: {len(mission.crew)}")
+        print("Crew members:")
+
+        for member in mission.crew:
+            print(f"- {member.name} ({member.rank.value}) - {member.specialization}")
+
+    except ValidationError as e:
+        print("Expected validation error:")
+        print(e.errors()[0]["msg"])
+
+
+main()
