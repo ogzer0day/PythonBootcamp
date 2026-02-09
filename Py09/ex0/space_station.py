@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field, ValidationError
 from datetime import datetime
 
+
 data = [
     {
         "station_id": "LGW125",
@@ -10,7 +11,7 @@ data = [
         "oxygen_level": 95.5,
         "last_maintenance": "2023-07-11T00:00:00",
         "is_operational": True,
-        "notes": None
+        "notes": None,
     },
     {
         "station_id": "LGW125",
@@ -20,23 +21,39 @@ data = [
         "oxygen_level": 95.5,
         "last_maintenance": "2023-07-11T00:00:00",
         "is_operational": True,
-        "notes": None
-    }
+        "notes": None,
+    },
 ]
 
+
 class SpaceStation(BaseModel):
+    """
+    Represents a space station and enforces validation rules
+    for operational and environmental parameters.
+
+    This model ensures that crew size, power levels, oxygen levels,
+    and maintenance dates meet predefined safety constraints.
+    """
+
     station_id: str = Field(min_length=3, max_length=10)
     name: str = Field(min_length=1, max_length=50)
     crew_size: int = Field(gt=1, le=20)
     power_level: float = Field(ge=0.0, le=100.0)
     oxygen_level: float = Field(ge=0.0, le=100.0)
-    last_maintenance: datetime = Field(description="DateTime field")
+    last_maintenance: datetime = Field(description="Last maintenance timestamp")
     is_operational: bool = Field(default=True)
     notes: str | None = Field(max_length=200)
 
 
-
 def main():
+    """
+    Entry point for validating space station data.
+
+    Iterates over sample station records, attempts to create
+    SpaceStation instances, and prints either validated station
+    details or validation error messages.
+    """
+
     print("Space Station Data Validation")
     print("========================================")
 
@@ -49,14 +66,16 @@ def main():
             print(f"Crew: {station.crew_size} people")
             print(f"Power: {station.power_level}%")
             print(f"Oxygen: {station.oxygen_level}%")
-            print(f"Status: {'Operational' if station.is_operational else 'Non-operational'}\n")
+            print(
+                "Status: "
+                f"{'Operational' if station.is_operational else 'Non-operational'}\n"
+            )
             print("========================================")
         except ValidationError as e:
             print("Expected validation error:")
-            for e in e.errors():
-                print(e['msg'])
+            for error in e.errors():
+                print(error["msg"])
 
-    
 
 if __name__ == "__main__":
     main()
