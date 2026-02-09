@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import Optional
 from enum import Enum
 
+
 data = [
     {
         "contact_id": "AC_2024_001",
@@ -30,6 +31,13 @@ data = [
 
 
 class ContactType(str, Enum):
+    """
+    Enumeration of supported alien contact types.
+
+    Defines the possible modes of extraterrestrial contact
+    for classification and validation purposes.
+    """
+
     radio = "radio"
     visual = "visual"
     physical = "physical"
@@ -37,6 +45,14 @@ class ContactType(str, Enum):
 
 
 class AlienContact(BaseModel):
+    """
+    Represents a validated record of an alien contact event.
+
+    This model enforces constraints on contact metadata such as
+    contact type, signal strength, witness count, and verification
+    requirements using Pydantic field validation and model-level rules.
+    """
+
     contact_id: str = Field(min_length=5, max_length=15)
     timestamp: datetime
     location: str = Field(min_length=3, max_length=100)
@@ -49,32 +65,66 @@ class AlienContact(BaseModel):
 
     @model_validator(mode="after")
     def check_contact_id(self):
+        """
+        Ensure the contact ID follows the expected prefix convention.
+
+        Contact IDs must begin with 'AC' to denote an Alien Contact record.
+        """
         if self.contact_id[0:2] != "AC":
-            raise ValueError("Contact ID must start with" "'AC' (Alien Contact)")
+            raise ValueError(
+                "Contact ID must start with 'AC' (Alien Contact)"
+            )
         return self
 
     @model_validator(mode="after")
     def check_physical_verified(self):
+        """
+        Require verification for physical contact events.
+
+        Physical encounters are considered high-risk and must
+        be explicitly verified.
+        """
         if self.contact_type == ContactType.physical and not self.is_verified:
             raise ValueError("Physical contacts must be verified")
         return self
 
     @model_validator(mode="after")
     def check_witness_count(self):
+        """
+        Validate minimum witness requirements.
+
+        Ensures that contact events meet the required number of
+        witnesses to be considered credible.
+        """
         if self.witness_count < 3:
-            raise ValueError("Telepathic contact requires at least 3 witnesses")
+            raise ValueError(
+                "Telepathic contact requires at least 3 witnesses"
+            )
         return self
 
     @model_validator(mode="after")
     def check_signal_strength(self):
+        """
+        Ensure strong signals include a received message.
+
+        High signal strength readings (> 7.0) are expected to
+        contain an intelligible transmitted message.
+        """
         if self.signal_strength > 7.0 and not self.message_received:
             raise ValueError(
-                "Strong signals (> 7.0) should include" "received messages"
+                "Strong signals (> 7.0) should include received messages"
             )
         return self
 
 
 def main():
+    """
+    Entry point for validating alien contact records.
+
+    Iterates through sample contact data, attempts model validation,
+    and prints either validated contact details or validation errors.
+    """
+
     print("Alien Contact Log Validation")
     print("======================================")
 
@@ -95,4 +145,5 @@ def main():
             print(e.errors()[0]["msg"])
 
 
-main()
+if __name__ == "__main__":
+    main()
