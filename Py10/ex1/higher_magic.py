@@ -1,16 +1,17 @@
 from typing import Callable
 
-test_values = [17, 20, 20]
-test_targets = ['Dragon', 'Goblin', 'Wizard', 'Knight']
 
-def fireball(power):
-    return (power * 2)
+def fireball():
+    return ("Fireball hits Dragon")
 
-def heal(power):
-    return (power)
+def heal():
+    return ("Heals Dragon")
 
 def check_mana(power):
     return (power <= 30)
+
+def base_spell(val):
+    return (val)
 
 
 def spell_combiner(spell1: Callable, spell2: Callable) -> Callable:
@@ -22,7 +23,7 @@ def spell_combiner(spell1: Callable, spell2: Callable) -> Callable:
     return combined
 
 
-def power_amplifier(base_spell: callable, multiplier: int) -> callable:
+def power_amplifier(base_spell: Callable, multiplier: int) -> Callable:
     def mage_fireball(*args, **kwargs):
         res = base_spell(*args, **kwargs)
         return (res * multiplier)
@@ -40,26 +41,21 @@ def conditional_caster(condition: Callable, spell: Callable) -> Callable:
     return cast
 
 
-
-
-def spell_sequence(spells: list[callable]) -> callable:
-    def casts_spells(*args, **kwargs):
-        res = spells(*args, **kwargs)
-        return (res)
-    return 
+def spell_sequence(spells: list[Callable]) -> Callable:
+    def casts_spells():
+        return (spells)
+    
+    return casts_spells
 
 
 def main():
 
+    print("Testing spell combiner...")
     combined = spell_combiner(fireball, heal)
-    print(combined(10))
+    print(f"Combined spell result: {combined()[0]}, {combined()[1]}\n")
 
-    mega_fireball = power_amplifier(fireball, 3)
-    print(mega_fireball(5))
-
-    cast = conditional_caster(check_mana, fireball)
-    print(cast(10))
-    print(cast(40))
-
+    print("Testing power amplifier...")
+    pow_ampl = power_amplifier(base_spell, 2)
+    print(f"Original: {10}, Amplified: {pow_ampl(10)}")
 
 main()
