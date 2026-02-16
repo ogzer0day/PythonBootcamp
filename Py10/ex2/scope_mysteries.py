@@ -11,7 +11,12 @@ def mage_counter() -> callable:
 
 
 def spell_accumulator(initial_power: int) -> callable:
-    pass
+    def accumlates_power():
+        nonlocal initial_power
+        initial_power += initial_power
+        return initial_power
+
+    return accumlates_power
 
 def enchantment_factory(enchantment_type: str) -> callable:
     pass
@@ -26,5 +31,14 @@ def main():
     print(ca())
     print(ca())
 
+    print()
+    acp = spell_accumulator(2)
+    print(acp())
+    print(acp())
+    print(acp())
+
+    print()
+    ench = enchantment_factory("Flaming")
+    print(ench("Sword"))
 
 main()
