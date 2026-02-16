@@ -26,23 +26,31 @@ def enchantment_factory(enchantment_type: str) -> callable:
     return ench_appl
 
 def memory_vault() -> dict[str, callable]:
-    pass
+    memory: dict = {}
+    def store(key, value):
+        memory[key] = value
 
+    def recall(key):
+        return memory.get(key, "Memory not found")
+    
+    return(
+        {
+            "store": store,
+            "recall": recall
+        }
+    )
 
 def main():
-    ca = mage_counter()
-    print(ca())
-    print(ca())
-    print(ca())
+    print("Testing mage counter...")
+    call = mage_counter()
+    print(f"Call 1: {call()}")
+    print(f"Call 2: {call()}")
+    print(f"Call 3: {call()}\n")
 
-    print()
-    acp = spell_accumulator(2)
-    print(acp())
-    print(acp())
-    print(acp())
-
-    print()
-    ench = enchantment_factory("Flaming")
-    print(ench("Sword"))
+    print("Testing enchantment factory...")
+    enchantment = enchantment_factory("Flaming")
+    print(enchantment("Sword"))
+    enchantment = enchantment_factory("Frozen")
+    print(enchantment("Shield"))
 
 main()
