@@ -19,7 +19,11 @@ def spell_accumulator(initial_power: int) -> callable:
     return accumlates_power
 
 def enchantment_factory(enchantment_type: str) -> callable:
-    pass
+    def ench_appl(enchantment_name: str):
+        nonlocal enchantment_type
+        return f"{enchantment_type} {enchantment_name}"
+    
+    return ench_appl
 
 def memory_vault() -> dict[str, callable]:
     pass
