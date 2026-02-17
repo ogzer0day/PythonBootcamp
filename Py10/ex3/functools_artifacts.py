@@ -1,5 +1,6 @@
 from functools import reduce, partial, lru_cache, singledispatch
 from operator import add, mul
+from typing import Callable
 
 spell_powers = [23, 10, 42, 33, 12, 15]
 operations = ['add', 'multiply', 'max', 'min']
@@ -18,7 +19,7 @@ def spell_reducer(spells: list[int], operation: str) -> int:
 def base_enchantment(power, element, target) -> str:
         return f"{element} enchant hits {target} with {power} power!"
 
-def partial_enchanter(base_enchantment: callable) -> dict[str, callable]:
+def partial_enchanter(base_enchantment: Callable) -> dict[str, callable]:
     return(
         {
             'fire_enchant': partial(base_enchantment, 50, "fire"),
@@ -27,25 +28,34 @@ def partial_enchanter(base_enchantment: callable) -> dict[str, callable]:
         }
     )
 
+
 @lru_cache
 def memoized_fibonacci(n: int) -> int:
     if n <= 1:
         return (n)
     return (memoized_fibonacci(n - 1) + memoized_fibonacci(n - 2))
 
-@singledispatch
-def spell_dispatcher() -> callable:
-    pass
 
+def spell_dispatcher() -> Callable:
 
-def damage_spell():
-    pass
+    @singledispatch
+    def cast(spell):
+        return "Unknown spell type"
 
-def enchantment():
-    pass
+    @cast.register(int)
+    def damage_spel(spell: int):
+        return f"Damage spell cast! {spell} damage dealt."
 
-def multi_cast():
-    pass
+    @cast.register(str)
+    def enchantment(spell: str):
+        return f"Enchantment applied: {spell}"
+
+    @cast.register(list)
+    def multi_cast(spell: list):
+        return f"Multi-cast activated! Casting {len(spell)} spells."
+
+    return cast
+
 
 
 def main():
