@@ -27,8 +27,11 @@ def partial_enchanter(base_enchantment: callable) -> dict[str, callable]:
         }
     )
 
+@lru_cache
 def memoized_fibonacci(n: int) -> int:
-    pass
+    if n <= 1:
+        return (n)
+    return (memoized_fibonacci(n - 1) + memoized_fibonacci(n - 2))
 
 @singledispatch
 def spell_dispatcher() -> callable:
