@@ -1,4 +1,3 @@
-
 artifacts = [
         {'name': 'Light Prism', 'power': 102, 'type': 'accessory'},
         {'name': 'Fire Staff', 'power': 120, 'type': 'relic'},
@@ -18,18 +17,22 @@ spells = ['meteor', 'darkness', 'flash', 'earthquake']
 
 
 def artifact_sorter(artifacts: list[dict]) -> list[dict]:
+    """Sort artifacts by power in descending order."""
     return (sorted(artifacts, key=lambda x: x.get('power'), reverse = True))
 
 
 def power_filter(mages: list[dict], min_power: int) -> list[dict]:
+    """Return mages with power greater than or equal to min_power."""
     return list(filter(lambda x: x.get('power') >= min_power, mages))
 
 
 def spell_transformer(spells: list[str]) -> list[str]:
+    """Format spell names with decorative symbols."""
     return list(map(lambda x: f"* {x} *", spells))
 
 
 def mage_stats(mages: list[dict]) -> dict:
+    """Compute highest, lowest, and average mage power."""
     most_pow = min(mages, key=lambda x: x.get('power'))
     least_pow = max(mages, key=lambda x: x.get('power'))
     avg_pow = sum(map(lambda x: x["power"], mages)) / len(mages)
@@ -43,6 +46,7 @@ def mage_stats(mages: list[dict]) -> dict:
     )
 
 def main():
+    """Run simple tests for artifact sorting and spell transformation."""
     print("Testing artifact sorter...")
     artifact = artifact_sorter(artifacts)
     print(f"{artifact[0]['name']} ({artifact[0]['power']} power) comes before"
