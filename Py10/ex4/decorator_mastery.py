@@ -27,18 +27,19 @@ def power_validator(min_power: int) -> Callable:
     def docerator(func):
 
         @wraps(func)
-        def check_pow(pow, *args, **kwargs):
-            if (pow < min_power):
-                return ("Insufficient power for this spell")
+        def check_pow(self, *args, **kwargs):
+            if "power" in kwargs:
+                power = kwargs["power"]
             else:
-                return (func(pow, *args, **kwargs))
+                power = args[1]
+
+            if power < min_power:
+                return "Insufficient power for this spell"
+
+            return func(self, *args, **kwargs)
             
         return (check_pow)
     return(docerator)
-
-@power_validator(15)
-def validator_pow(pow, spell_name):
-    print(f"Successfully cast {spell_name} with {pow} power")
 
 
 def retry_spell(max_attempts: int) -> Callable:
@@ -68,21 +69,25 @@ def check_failed():
 class MageGuild:
     @staticmethod
     def validate_mage_name(name: str) -> bool:
-        pass
+        if len(name) >= 3 and all(char.isalpha() or char.isspace() for char in name):
+            return (True)
+        return (False)
 
+    @power_validator(10)
     def cast_spell(self, spell_name: str, power: int) -> str:
-        pass
+        print(f"Successfully cast {spell_name} with {power} power")
 
 
 def main():
     print("Testing spell timer...")
     print(timer("Fireball cast!"), "\n")
 
-    print("Testing MageGuild...")
-    validator_pow(15, "lightning")
-    print(validator_pow(2, "lightning"), "\n")
+    print('Testing MageGuild...')
+    mage_guild = MageGuild()
+    print(mage_guild.validate_mage_name("mohamed zougari"))
+    print(mage_guild.validate_mage_name("mohamedzo232ugari"))
+    mage_guild.cast_spell(spell_name="Lightning", power=15)
+    print(mage_guild.cast_spell(spell_name="Lightning", power=2))
 
-    print("test failed spells")
-    print(check_failed())
 
 main()
