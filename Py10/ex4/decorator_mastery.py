@@ -1,5 +1,6 @@
 from typing import Callable
 from functools import wraps
+import random
 import time
 
 def spell_timer(func: Callable) -> Callable:
@@ -19,7 +20,6 @@ def spell_timer(func: Callable) -> Callable:
 @spell_timer
 def timer(var):
     return (var)
-
 
 
 def power_validator(min_power: int) -> Callable:
@@ -42,7 +42,27 @@ def validator_pow(pow, spell_name):
 
 
 def retry_spell(max_attempts: int) -> Callable:
-    pass
+    
+    def docerator(func):
+        @wraps(func)
+        def failed_spells(*argas, **kwargs):
+
+            for n in range(max_attempts):
+                try:    
+                    return func(*argas, **kwargs)
+                except Exception:
+                    print(f"Spell failed, retrying... (attempt {n}/{max_attempts})")
+
+            return f"Spell casting failed after {max_attempts} attempts"
+        return failed_spells
+    return docerator
+
+
+@retry_spell(3)
+def check_failed():
+    if random.random() < 0.7:
+        raise ValueError("Random failure occurred!")
+    return "Fireball cast successfully!"
 
 
 class MageGuild:
@@ -50,7 +70,7 @@ class MageGuild:
     def validate_mage_name(name: str) -> bool:
         pass
 
-    def cast_spell(self, spell_name: str, power: int) -> str
+    def cast_spell(self, spell_name: str, power: int) -> str:
         pass
 
 
@@ -60,6 +80,9 @@ def main():
 
     print("Testing MageGuild...")
     validator_pow(15, "lightning")
-    print(validator_pow(2, "lightning"))
+    print(validator_pow(2, "lightning"), "\n")
+
+    print("test failed spells")
+    print(check_failed())
 
 main()
