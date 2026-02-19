@@ -3,43 +3,42 @@ from operator import add, mul
 from typing import Callable
 
 spell_powers = [23, 10, 42, 33, 12, 15]
-operations = ['add', 'multiply', 'max', 'min']
+operations = ["add", "multiply", "max", "min"]
 fibonacci_tests = [13, 19, 8]
+
 
 def spell_reducer(spells: list[int], operation: str) -> int:
     """Reduce spell powers using a specified operation."""
-    if (operation == 'add'):
-        return (reduce(add, spells))
-    elif (operation == 'multiply'):
-        return (reduce(mul, spells))
-    elif (operation == 'max'):
-        return (reduce(max, spells))
-    elif (operation == 'min'):
-        return (reduce(min, spells))     
-        
+    if operation == "add":
+        return reduce(add, spells)
+    elif operation == "multiply":
+        return reduce(mul, spells)
+    elif operation == "max":
+        return reduce(max, spells)
+    elif operation == "min":
+        return reduce(min, spells)
+
 
 def base_enchantment(power, element, target) -> str:
-        """Create a base enchantment message."""
-        return f"{element} enchant hits {target} with {power} power!"
+    """Create a base enchantment message."""
+    return f"{element} enchant hits {target} with {power} power!"
 
 
 def partial_enchanter(base_enchantment: Callable) -> dict[str, callable]:
     """Create partially applied enchantment functions."""
-    return(
-        {
-            'fire_enchant': partial(base_enchantment, 50, "fire"),
-            'ice_enchant': partial(base_enchantment, 50, "ice"),
-            'lightning_enchant': partial(base_enchantment, 50, "lightning"),
-        }
-    )
+    return {
+        "fire_enchant": partial(base_enchantment, 50, "fire"),
+        "ice_enchant": partial(base_enchantment, 50, "ice"),
+        "lightning_enchant": partial(base_enchantment, 50, "lightning"),
+    }
 
 
 @lru_cache
 def memoized_fibonacci(n: int) -> int:
     """Compute Fibonacci numbers using memoization."""
     if n <= 1:
-        return (n)
-    return (memoized_fibonacci(n - 1) + memoized_fibonacci(n - 2))
+        return n
+    return memoized_fibonacci(n - 1) + memoized_fibonacci(n - 2)
 
 
 def spell_dispatcher() -> Callable:
@@ -66,7 +65,6 @@ def spell_dispatcher() -> Callable:
         return f"Multi-cast activated! Casting {len(spell)} spells."
 
     return cast
-
 
 
 def main():

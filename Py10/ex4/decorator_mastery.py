@@ -6,6 +6,7 @@ import time
 
 def spell_timer(func: Callable) -> Callable:
     """Measure and display execution time of a function."""
+
     @wraps(func)
     def execution_time(*args, **kwargs):
         """Wrapper that times function execution."""
@@ -14,21 +15,23 @@ def spell_timer(func: Callable) -> Callable:
         res = func(*args, **kwargs)
         end = time.perf_counter()
         print(f"Spell completed in {end - start:.3f} seconds")
-        return (res)
-    
-    return (execution_time)
+        return res
+
+    return execution_time
 
 
 @spell_timer
 def timer(var):
     """Return the given value."""
-    return (var)
+    return var
 
 
 def power_validator(min_power: int) -> Callable:
     """Validate that a spell has sufficient power."""
+
     def docerator(func):
         """Decorator to enforce minimum power."""
+
         @wraps(func)
         def check_pow(self, *args, **kwargs):
             """Check spell power before casting."""
@@ -41,26 +44,32 @@ def power_validator(min_power: int) -> Callable:
                 return "Insufficient power for this spell"
 
             return func(self, *args, **kwargs)
-            
-        return (check_pow)
-    return(docerator)
+
+        return check_pow
+
+    return docerator
 
 
 def retry_spell(max_attempts: int) -> Callable:
     """Retry a spell if it raises an exception."""
+
     def docerator(func):
         """Decorator to retry failed spell execution."""
+
         @wraps(func)
         def failed_spells(*argas, **kwargs):
             """Attempt to execute a spell multiple times."""
             for n in range(max_attempts):
-                try:    
+                try:
                     return func(*argas, **kwargs)
                 except Exception:
-                    print(f"Spell failed, retrying... (attempt {n}/{max_attempts})")
+                    print("Spell failed, retrying... "
+                          f"(attempt {n}/{max_attempts})")
 
             return f"Spell casting failed after {max_attempts} attempts"
+
         return failed_spells
+
     return docerator
 
 
@@ -78,9 +87,10 @@ class MageGuild:
     @staticmethod
     def validate_mage_name(name: str) -> bool:
         """Validate a mage name."""
-        if len(name) >= 3 and all(char.isalpha() or char.isspace() for char in name):
-            return (True)
-        return (False)
+        if len(name) >= 3 and all(char.isalpha() or char.isspace()
+                                  for char in name):
+            return True
+        return False
 
     @power_validator(10)
     def cast_spell(self, spell_name: str, power: int) -> str:
@@ -93,7 +103,7 @@ def main():
     print("Testing spell timer...")
     print(timer("Fireball cast!"), "\n")
 
-    print('Testing MageGuild...')
+    print("Testing MageGuild...")
     mage_guild = MageGuild()
     print(mage_guild.validate_mage_name("mohamed zougari"))
     print(mage_guild.validate_mage_name("mohamedzo232ugari"))
