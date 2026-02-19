@@ -23,7 +23,22 @@ def timer(var):
 
 
 def power_validator(min_power: int) -> Callable:
-    pass
+
+    def docerator(func):
+
+        @wraps(func)
+        def check_pow(pow, *args, **kwargs):
+            if (pow < min_power):
+                return ("Insufficient power for this spell")
+            else:
+                return (func(pow, *args, **kwargs))
+            
+        return (check_pow)
+    return(docerator)
+
+@power_validator(15)
+def validator_pow(pow, spell_name):
+    print(f"Successfully cast {spell_name} with {pow} power")
 
 
 def retry_spell(max_attempts: int) -> Callable:
@@ -35,12 +50,16 @@ class MageGuild:
     def validate_mage_name(name: str) -> bool:
         pass
 
-    def cast_spell(self, spell_name: str, power: int) -> str:
+    def cast_spell(self, spell_name: str, power: int) -> str
         pass
 
 
 def main():
     print("Testing spell timer...")
     print(timer("Fireball cast!"), "\n")
+
+    print("Testing MageGuild...")
+    validator_pow(15, "lightning")
+    print(validator_pow(2, "lightning"))
 
 main()
